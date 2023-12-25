@@ -1,24 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
-  fetchXmlData();
+  chrome.storage.sync.get({
+    showSunriseSunset: true,
+    city: 'Christchurch',
+    country: 'New Zealand',
+    method: 2
+  }, (data) => {
+    fetchXmlData(data.showSunriseSunset, data.city, data.country, data.method);
+  });
 });
 
-function fetchXmlData() {
-	const today = new Date();
-	const formattedDate = today.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+function fetchXmlData(showSunriseSunset, city, country, method) {
+  const today = new Date();
+  const formattedDate = today.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const apiUrl = `https://api.aladhan.com/v1/timingsByCity?city=${city}&country=${country}&method=${method}&date=${formattedDate}`;
 
-  fetch('https://api.aladhan.com/v1/timingsByCity?city=Christchurch&country=New+Zealand&method=2&date=' + formattedDate)
+  fetch(apiUrl)
     .then(response => response.json())
-    .then(displayData)
+    .then(data => displayData(data, showSunriseSunset))
     .catch(error => console.error('Error fetching data:', error));
 }
 
-
-function displayData(data) {
+function displayData(data, showSunriseSunset) {
   const dataContainer = document.getElementById('data-container');
   const timings = data.data.timings;
 
   const filteredTimings = Object.entries(timings)
-    .filter(([name]) => name !== 'Imsak' && name !== 'Sunset' && name !== 'Midnight' && name !== 'Firstthird' && name !== 'Lastthird')
+    .filter(([name]) => {
+      if (showSunriseSunset) {
+        return name !== 'Imsak' && name !== 'Midnight' && name !== 'Firstthird' && name !== 'Lastthird';
+      } else {
+        return name !== 'Imsak' && name !== 'Sunset' && name !== 'Midnight' && name !== 'Firstthird' && name !== 'Lastthird';
+      }
+    })
     .map(([name, time]) => {
       const [hours, minutes] = time.split(':');
       const hours12 = hours % 12 || 12;
@@ -27,13 +40,13 @@ function displayData(data) {
 
       return `
         <div class="timing-item">
-          <div class="prayer" >${name}: </div><span class="time">${hours12}:${minutes} ${amPm}</span><br/><br/>
+          <div class="prayer">${name}: </div><span class="time">${hours12}:${minutes} ${amPm}</span><br/><br/>
         </div>
       `;
     });
 
   dataContainer.innerHTML = `
-	<h3>Fianz Prayer Times</h3>
+    <h3>Fianz Prayer Times</h3>
     <div class="timing-container">${filteredTimings.join('')}</div>
   `;
 }

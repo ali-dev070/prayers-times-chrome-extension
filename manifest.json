@@ -17,7 +17,8 @@
   },
   "permissions": [
     "activeTab",
-	"alarms"
+	"alarms",
+	"storage"
   ],
   "host_permissions": [
 	"https://api.aladhan.com/v1/*"
