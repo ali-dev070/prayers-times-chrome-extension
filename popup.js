@@ -46,7 +46,7 @@ function displayData(data, showSunriseSunset) {
     });
 
   dataContainer.innerHTML = `
-    <h3>Fianz Prayer Times</h3>
+    <h3>Muslims' Prayer Times</h3>
     <div class="timing-container">${filteredTimings.join('')}</div>
   `;
 }
