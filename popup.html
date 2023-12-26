@@ -14,21 +14,38 @@
 	}
 	#footer{
 	  font-size: 6px;
-	  position: fixed;
+	  position: absolute;
 	  bottom: 0px;
-	  right: 6px;
+	  right: 0px;
 	}
 	#title{
 	  text-align: center;
 	}
-	</style>
+	#data-container{
+		min-height: fit-content;
+	}
+	#link-container{
+		height: 20px;
+	}
+	#foot-container{
+		height: 20px;
+		position: relative;
+	}
+	
+  </style>
 </head>
 <body>
-  <div id="data-container">
-	<h3>Loading data...</h3>
+  <div>
+	<div id="data-container">
+		<h3>Loading data...</h3>
+	</div>
+	<div id="link-container">
+		<a id="link-settings" href="chrome-extension://insert-extension-id-here/options.html">Settings</a>
+	</div>
+	<div id="foot-container">
+		<p id="footer">Developed by Ansar Ali and powered by <a href="https://aladhan.com/prayer-times-api">Al-Adhan's Prayer API</a></p>
+	</div>
   </div>
-  <a href="chrome-extension://mbihcjibdnifnlhahhpfjeacoficfddn/options.html">Settings</a>
-  <p id="footer">Developed by Ansar Ali and powered by <a href="https://aladhan.com/prayer-times-api">Al-Adhan's Prayer API</a></p>
   <script src="popup.js"></script>
 </body>
 </html>

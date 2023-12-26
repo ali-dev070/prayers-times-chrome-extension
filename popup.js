@@ -1,12 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
-  chrome.storage.sync.get({
-    showSunriseSunset: true,
-    city: 'Christchurch',
-    country: 'New Zealand',
-    method: 2
-  }, (data) => {
-    fetchXmlData(data.showSunriseSunset, data.city, data.country, data.method);
-  });
+	
+	const linkSettings = document.getElementById('link-settings');
+//	var idOfThisApplication = chrome.i18n.getMessage("@@extension_id");
+	var idOfThisApplication = chrome.runtime.id;
+	linkSettings.href = `chrome-extension://${idOfThisApplication}/options.html`;
+  
+	chrome.storage.sync.get({
+		showSunriseSunset: true,
+		city: 'Christchurch',
+		country: 'New Zealand',
+		method: 2
+	}, (data) => {
+		fetchXmlData(data.showSunriseSunset, data.city, data.country, data.method);
+	});
 });
 
 function fetchXmlData(showSunriseSunset, city, country, method) {
